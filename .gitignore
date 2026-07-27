@@ -1,0 +1,28 @@
+# Private environment settings and deployment secrets
+**/.env
+**/.env.*
+!**/.env.example
+!**/.env.production.example
+
+# Installed packages and build output
+**/node_modules/
+**/dist/
+**/dist-ssr/
+**/coverage/
+
+# Local-only database, uploaded files, and migration export
+backend/prisma/dev.db
+backend/prisma/*.db-journal
+backend/uploads/
+backend/data/local-export.json
+
+# Logs and operating-system/editor files
+**/logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json

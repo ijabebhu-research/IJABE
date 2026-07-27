@@ -1,0 +1,50 @@
+{
+  "name": "backend",
+  "version": "0.1.0",
+  "description": "IJABE backend foundation",
+  "type": "module",
+  "main": "dist/server.js",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/server.js",
+    "lint": "oxlint src",
+    "prisma:generate": "prisma generate",
+    "prisma:generate:production": "prisma generate --schema prisma-postgres/schema.prisma",
+    "prisma:migrate:production": "prisma migrate deploy --schema prisma-postgres/schema.prisma",
+    "data:export:sqlite": "npm run prisma:generate && tsx scripts/export-sqlite-data.ts",
+    "data:import:production": "tsx scripts/import-production-data.ts",
+    "files:migrate:production": "tsx scripts/migrate-local-files-to-r2.ts",
+    "prisma:validate": "prisma validate",
+    "prisma:seed": "tsx prisma/seed.ts"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.1095.0",
+    "@prisma/client": "^5.22.0",
+    "bcryptjs": "^3.0.3",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/cookie-parser": "^1.4.10",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^26.1.1",
+    "oxlint": "^1.75.0",
+    "prisma": "^5.22.0",
+    "tsx": "^4.23.1",
+    "typescript": "^7.0.2"
+  }
+}
