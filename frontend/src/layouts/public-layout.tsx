@@ -13,12 +13,19 @@ export function PublicLayout() {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background px-6">
         <div className="w-full max-w-sm space-y-4 text-center">
-          <div className="mx-auto h-14 w-14 animate-pulse rounded-2xl bg-primary/15" />
-          <div className="mx-auto h-5 w-24 animate-pulse rounded bg-primary/15" />
-          <div className="mx-auto h-4 w-56 animate-pulse rounded bg-muted" />
-          <p className="text-sm text-muted-foreground">
-            {siteContentState.isLoading ? 'Loading IJABE...' : 'Live content is temporarily unavailable. Please refresh the page.'}
-          </p>
+          <img
+            alt="Bingham University logo"
+            className="mx-auto h-20 w-20 animate-pulse rounded-2xl object-cover shadow-sm"
+            src="/images/bingham-university-logo.jpg"
+          />
+          <div className="space-y-2">
+            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-primary">IJABE</p>
+            <p className="text-sm text-muted-foreground">
+              {siteContentState.isLoading
+                ? 'Loading IJABE...'
+                : 'Live content is temporarily unavailable. Please refresh the page.'}
+            </p>
+          </div>
         </div>
       </div>
     )
