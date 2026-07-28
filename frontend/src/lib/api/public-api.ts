@@ -1,8 +1,4 @@
 import {
-  fallbackArchiveIssues,
-  fallbackCurrentIssue,
-  fallbackPublications,
-  fallbackSiteContent,
   type ArchiveIssue,
   type ContactInquiryPayload,
   type ContactInquiryResponse,
@@ -21,19 +17,15 @@ const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, '') ??
   'http://localhost:4000/api'
 
-async function request<T>(path: string, fallback: T): Promise<T> {
-  try {
-    const response = await fetch(`${API_BASE_URL}${path}`)
+async function request<T>(path: string): Promise<T> {
+  const response = await fetch(`${API_BASE_URL}${path}`)
 
-    if (!response.ok) {
-      throw new Error(`Request failed with status ${response.status}`)
-    }
-
-    const payload = (await response.json()) as ApiEnvelope<T>
-    return payload.data
-  } catch {
-    return fallback
+  if (!response.ok) {
+    throw new Error(`Request failed with status ${response.status}`)
   }
+
+  const payload = (await response.json()) as ApiEnvelope<T>
+  return payload.data
 }
 
 async function post<TRequest, TResponse>(
@@ -57,28 +49,19 @@ async function post<TRequest, TResponse>(
 }
 
 export function getPublicSiteContent() {
-  return request<PublicSiteContent>('/site-settings/public', fallbackSiteContent)
+  return request<PublicSiteContent>('/site-settings/public')
 }
 
 export function getCurrentIssue() {
-  return request<CurrentIssue>('/issues/current', fallbackCurrentIssue)
+  return request<CurrentIssue>('/issues/current')
 }
 
 export function getIssueBySlug(slug: string) {
-  const fallbackIssue =
-    slug === fallbackCurrentIssue.slug
-      ? fallbackCurrentIssue
-      : {
-          ...fallbackCurrentIssue,
-          ...fallbackArchiveIssues.find((issue) => issue.slug === slug),
-          publications: fallbackPublications.filter((publication) => publication.issueSlug === slug),
-        }
-
-  return request<CurrentIssue>(`/issues/${slug}`, fallbackIssue)
+  return request<CurrentIssue>(`/issues/${slug}`)
 }
 
 export function getArchiveIssues() {
-  return request<ArchiveIssue[]>('/issues/archives', fallbackArchiveIssues)
+  return request<ArchiveIssue[]>('/issues/archives')
 }
 
 export function getPublications(query?: string, issue?: string) {
@@ -93,15 +76,11 @@ export function getPublications(query?: string, issue?: string) {
   }
 
   const suffix = params.toString() ? `?${params.toString()}` : ''
-  return request<Publication[]>(`/publications${suffix}`, fallbackPublications)
+  return request<Publication[]>(`/publications${suffix}`)
 }
 
 export async function getPublicationBySlug(slug: string) {
-  const fallbackPublication =
-    fallbackPublications.find((publication) => publication.slug === slug) ??
-    fallbackPublications[0]
-
-  return request<Publication>(`/publications/${slug}`, fallbackPublication)
+  return request<Publication>(`/publications/${slug}`)
 }
 
 export function submitContactInquiry(payload: ContactInquiryPayload) {

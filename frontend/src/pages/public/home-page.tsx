@@ -11,10 +11,19 @@ import { usePublicResource } from '@/hooks/use-public-resource'
 import { getPublicSiteContent, getPublications } from '@/lib/api/public-api'
 import { fallbackPublications, fallbackSiteContent } from '@/lib/public-content'
 
+const leadershipFallbackImages: Record<string, string> = {
+  'leadership-vice-chancellor': '/images/prof-haruna-k-ayuba.jpg',
+  'leadership-university-management': '/images/prof-orbunde-b-bemshima.jpg',
+  'leadership-research-unit-head': '/images/dr-caleb-y-yashim.jpg',
+}
+
 export function HomePage() {
   const siteContentState = usePublicResource(getPublicSiteContent, fallbackSiteContent)
   const publicationsState = usePublicResource(getPublications, fallbackPublications)
-  const publications = useMemo(() => publicationsState.data.slice(0, 2), [publicationsState.data])
+  const publications = useMemo(
+    () => (publicationsState.isLoading || publicationsState.isFallback ? [] : publicationsState.data.slice(0, 2)),
+    [publicationsState.data, publicationsState.isFallback, publicationsState.isLoading],
+  )
   const news = useMemo(() => siteContentState.data.news.slice(0, 2), [siteContentState.data.news])
 
   return (
@@ -34,6 +43,12 @@ export function HomePage() {
                 alt={leader.name}
                 className="aspect-[4/3] w-full rounded-2xl object-cover object-top shadow-sm"
                 src={leader.imageUrl}
+                onError={(event) => {
+                  const fallbackImage = leadershipFallbackImages[leader.id]
+                  if (fallbackImage && event.currentTarget.getAttribute('src') !== fallbackImage) {
+                    event.currentTarget.src = fallbackImage
+                  }
+                }}
               />
               <CardHeader className="px-0 pb-0 pt-5">
                 <CardTitle className="text-xl">{leader.name}</CardTitle>
