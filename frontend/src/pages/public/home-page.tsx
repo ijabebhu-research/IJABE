@@ -26,6 +26,32 @@ export function HomePage() {
   )
   const news = useMemo(() => siteContentState.data.news.slice(0, 2), [siteContentState.data.news])
 
+  if (siteContentState.isLoading || publicationsState.isLoading) {
+    return (
+      <div className="flex min-h-[60vh] items-center justify-center px-6">
+        <div className="w-full max-w-sm space-y-4 text-center">
+          <img
+            alt="Bingham University logo"
+            className="mx-auto h-20 w-20 animate-pulse rounded-2xl object-cover shadow-sm"
+            src="/images/bingham-university-logo.jpg"
+          />
+          <p className="text-sm font-semibold uppercase tracking-[0.24em] text-primary">IJABE</p>
+          <p className="text-sm text-muted-foreground">Loading IJABE...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (siteContentState.isFallback || publicationsState.isFallback) {
+    return (
+      <div className="flex min-h-[60vh] items-center justify-center px-6 text-center">
+        <p className="max-w-md text-sm leading-6 text-muted-foreground">
+          Live content is temporarily unavailable. Please refresh the page.
+        </p>
+      </div>
+    )
+  }
+
   return (
     <div className="space-y-14 pb-6">
       <DataStatus isFallback={siteContentState.isFallback || publicationsState.isFallback} isLoading={siteContentState.isLoading || publicationsState.isLoading} />
