@@ -1,18 +1,22 @@
-import { ChevronRight, LayoutDashboard } from 'lucide-react'
+import { ChevronRight, LayoutDashboard, Menu, X } from 'lucide-react'
+import { useState } from 'react'
 import { NavLink, Outlet } from 'react-router-dom'
 
 import { useAdmin } from '@/components/admin/use-admin'
+import { ThemeToggle } from '@/components/site/theme-toggle'
 import { Button } from '@/components/ui/button'
 import { adminNavItems } from '@/lib/navigation'
 
 export function AdminLayout() {
   const { dashboard, logout, user } = useAdmin()
+  const [isNavigationOpen, setIsNavigationOpen] = useState(false)
 
   return (
     <div className="min-h-screen bg-[#f7f5ef] text-slate-900">
       <div className="mx-auto grid min-h-screen max-w-7xl gap-6 px-4 py-6 lg:grid-cols-[260px_1fr] lg:px-8">
         <aside className="rounded-[28px] border border-[#154734]/15 bg-white p-5 shadow-sm">
-          <div className="mb-8 space-y-2">
+          <div className="mb-5 flex items-start justify-between gap-3 lg:mb-8">
+            <div className="space-y-2">
             <img alt="Bingham University logo" className="h-16 w-16 rounded-xl object-cover" src="/images/bingham-university-logo.jpg" />
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#154734]">Admin workspace</p>
             <h1 className="flex items-center gap-2 text-2xl font-semibold">
@@ -20,9 +24,22 @@ export function AdminLayout() {
               IJABE Admin
             </h1>
             <p className="text-sm leading-6 text-slate-600">Manage IJABE publications, news, conferences, and applications.</p>
+            </div>
+            <Button
+              aria-expanded={isNavigationOpen}
+              aria-label={isNavigationOpen ? 'Close admin navigation' : 'Open admin navigation'}
+              className="shrink-0 lg:hidden"
+              onClick={() => setIsNavigationOpen((isOpen) => !isOpen)}
+              size="sm"
+              type="button"
+              variant="secondary"
+            >
+              {isNavigationOpen ? <X className="size-4" /> : <Menu className="size-4" />}
+              <span className="hidden sm:inline">{isNavigationOpen ? 'Close' : 'Menu'}</span>
+            </Button>
           </div>
 
-          <nav className="space-y-2">
+          <nav className={`${isNavigationOpen ? 'block' : 'hidden'} space-y-2 lg:block`}>
             {adminNavItems.map((item) => (
               <NavLink
                 key={item.path}
@@ -34,6 +51,7 @@ export function AdminLayout() {
                   }`
                 }
                 to={item.path}
+                onClick={() => setIsNavigationOpen(false)}
               >
                 <div className="flex items-center justify-between gap-3">
                   <span>{item.label}</span>
@@ -61,6 +79,7 @@ export function AdminLayout() {
               </p>
             </div>
             <div className="flex flex-wrap gap-3">
+              <ThemeToggle />
               <Button asChild variant="secondary">
                 <NavLink to="/">Return to website</NavLink>
               </Button>
