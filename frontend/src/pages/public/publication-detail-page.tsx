@@ -30,15 +30,33 @@ export function PublicationDetailPage() {
   useEffect(() => {
     if (publicationState.isLoading || publicationState.isFallback) return
     const publication = publicationState.data
+    const pageUrl = `https://www.ijabebhu.com/research-repository/${publication.slug}`
+    const setMeta = (selector: string, attribute: string, value: string) => {
+      let element = document.head.querySelector(selector) as HTMLMetaElement | null
+      if (!element) {
+        element = document.createElement('meta')
+        const [name, content] = selector.match(/\[([^=]+)="([^"]+)"\]/)?.slice(1) ?? []
+        if (name && content) element.setAttribute(name, content)
+        document.head.appendChild(element)
+      }
+      element.setAttribute(attribute, value)
+    }
     document.title = `${publication.title} | IJABE`
-    let description = document.querySelector('meta[name="description"]')
-    if (!description) { description = document.createElement('meta'); description.setAttribute('name', 'description'); document.head.appendChild(description) }
-    description.setAttribute('content', publication.abstract)
+    setMeta('meta[name="description"]', 'content', publication.abstract)
+    setMeta('meta[property="og:title"]', 'content', `${publication.title} | IJABE`)
+    setMeta('meta[property="og:description"]', 'content', publication.abstract)
+    setMeta('meta[property="og:type"]', 'content', 'article')
+    setMeta('meta[property="og:url"]', 'content', pageUrl)
+    setMeta('meta[name="twitter:title"]', 'content', `${publication.title} | IJABE`)
+    setMeta('meta[name="twitter:description"]', 'content', publication.abstract)
+    let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null
+    if (!canonical) { canonical = document.createElement('link'); canonical.rel = 'canonical'; document.head.appendChild(canonical) }
+    canonical.href = pageUrl
     const structuredData = document.createElement('script')
     structuredData.type = 'application/ld+json'
-    structuredData.text = JSON.stringify({ '@context': 'https://schema.org', '@type': 'ScholarlyArticle', headline: publication.title, author: publication.authors.map((name) => ({ '@type': 'Person', name })), datePublished: publication.publishedAt, keywords: publication.keywords.join(', '), url: window.location.href, isPartOf: { '@type': 'Periodical', name: 'International Journal of Accounting, Business Administration & Entrepreneurship (IJABE)' } })
+    structuredData.text = JSON.stringify({ '@context': 'https://schema.org', '@type': 'ScholarlyArticle', headline: publication.title, description: publication.abstract, author: publication.authors.map((name) => ({ '@type': 'Person', name })), datePublished: publication.publishedAt, keywords: publication.keywords.join(', '), url: pageUrl, mainEntityOfPage: pageUrl, isPartOf: { '@type': 'Periodical', name: 'International Journal of Accounting, Business Administration & Entrepreneurship (IJABE)' }, publisher: { '@type': 'Organization', name: 'IJABE', url: 'https://www.ijabebhu.com/' } })
     document.head.appendChild(structuredData)
-    return () => structuredData.remove()
+    return () => { structuredData.remove(); canonical?.setAttribute('href', 'https://www.ijabebhu.com/') }
   }, [publicationState.data, publicationState.isFallback, publicationState.isLoading])
 
   return (
