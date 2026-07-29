@@ -1,5 +1,5 @@
 import { FileDown } from 'lucide-react'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { NavLink, useParams } from 'react-router-dom'
 
 import { DataStatus } from '@/components/public/data-status'
@@ -26,6 +26,20 @@ export function PublicationDetailPage() {
   }, [slug])
 
   const publicationState = usePublicResource(loader, fallbackPublications[0])
+
+  useEffect(() => {
+    if (publicationState.isLoading || publicationState.isFallback) return
+    const publication = publicationState.data
+    document.title = `${publication.title} | IJABE`
+    let description = document.querySelector('meta[name="description"]')
+    if (!description) { description = document.createElement('meta'); description.setAttribute('name', 'description'); document.head.appendChild(description) }
+    description.setAttribute('content', publication.abstract)
+    const structuredData = document.createElement('script')
+    structuredData.type = 'application/ld+json'
+    structuredData.text = JSON.stringify({ '@context': 'https://schema.org', '@type': 'ScholarlyArticle', headline: publication.title, author: publication.authors.map((name) => ({ '@type': 'Person', name })), datePublished: publication.publishedAt, keywords: publication.keywords.join(', '), url: window.location.href, isPartOf: { '@type': 'Periodical', name: 'International Journal of Accounting, Business Administration & Entrepreneurship (IJABE)' } })
+    document.head.appendChild(structuredData)
+    return () => structuredData.remove()
+  }, [publicationState.data, publicationState.isFallback, publicationState.isLoading])
 
   return (
     <div className="space-y-6">

@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 
+const resourceCache = new WeakMap<() => Promise<unknown>, unknown>()
+
 type ResourceState<T> = {
   data: T
   isLoading: boolean
@@ -10,9 +12,10 @@ export function usePublicResource<T>(
   loader: () => Promise<T>,
   fallback: T,
 ): ResourceState<T> {
-  const [data, setData] = useState<T>(fallback)
-  const [isLoading, setIsLoading] = useState(true)
-  const [isFallback, setIsFallback] = useState(true)
+  const getCachedData = () => resourceCache.get(loader) as T | undefined
+  const [data, setData] = useState<T>(() => getCachedData() ?? fallback)
+  const [isLoading, setIsLoading] = useState(() => getCachedData() === undefined)
+  const [isFallback, setIsFallback] = useState(() => getCachedData() === undefined)
 
   useEffect(() => {
     let isMounted = true
@@ -26,6 +29,7 @@ export function usePublicResource<T>(
           return
         }
 
+        resourceCache.set(loader, result)
         setData(result)
         setIsFallback(false)
       } catch {

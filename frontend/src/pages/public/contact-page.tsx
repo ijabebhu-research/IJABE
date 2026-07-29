@@ -89,6 +89,13 @@ export function ContactPage() {
               </div>
             </div>
 
+            {contact.editorialContacts?.filter((person) => person.name || person.phone).map((person) => (
+              <div key={person.role} className="flex items-start gap-3 rounded-2xl border border-border/70 bg-secondary/40 p-4">
+                <Phone className="mt-0.5 size-4 text-primary" />
+                <div className="space-y-1"><p className="font-medium text-foreground">{person.role}</p><p>{person.name}</p>{person.phone && <a className="block hover:text-foreground" href={`tel:${person.phone}`}>{person.phone}</a>}</div>
+              </div>
+            ))}
+
             <div className="flex items-start gap-3 rounded-2xl border border-border/70 bg-secondary/40 p-4">
               <Phone className="mt-0.5 size-4 text-primary" />
               <div className="space-y-1">

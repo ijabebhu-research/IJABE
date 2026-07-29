@@ -286,3 +286,10 @@ shared/
 - Added Railway deployment configuration, Vercel single-page-app routing, and separate production environment variable templates.
 - Added safe local-content export, PostgreSQL import, and local-file-to-R2 migration commands for the existing journal records and uploads.
 - Added a plain-language, step-by-step deployment guide at `docs/DEPLOYMENT.md` covering backup, R2, Railway, Vercel, domain setup, migration, and launch checks.
+
+## Content Organisation and Discoverability Update - July 29, 2026
+
+- Grouped administrator article management by journal volume and issue, with direct article creation inside the selected issue.
+- Limited public article previews to four lines with a clear Read more action, and moved the About IJABE section before management profiles.
+- Added editable Chief Editor, Managing Editor, and Secretary contact details to the public contact page and administrator workspace.
+- Added crawler instructions, sitemap, and ScholarlyArticle structured data for publication pages to support search-engine discovery.

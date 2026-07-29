@@ -92,6 +92,19 @@ const contactSchema = z.object({
   phone: z.string().trim().min(1).max(80),
   address: z.string().trim().min(1).max(240),
   officeHours: z.string().trim().min(1).max(160),
+  editorialContacts: z
+    .array(
+      z.object({
+        role: z.string().trim().min(1).max(80),
+        name: z.string().trim().max(160),
+        phone: z.string().trim().max(80),
+      }),
+    )
+    .default([
+      { role: 'Chief Editor', name: '', phone: '' },
+      { role: 'Managing Editor', name: '', phone: '' },
+      { role: 'Secretary', name: '', phone: '' },
+    ]),
 })
 
 const brandingSchema = z.object({

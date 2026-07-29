@@ -82,6 +82,7 @@ export type ContactProfile = {
   phone: string
   address: string
   officeHours: string
+  editorialContacts: Array<{ role: string; name: string; phone: string }>
 }
 
 export type BrandingContent = {
@@ -392,6 +393,11 @@ export const fallbackSiteContent: PublicSiteContent = {
     phone: '+234 800 000 0000',
     address: 'Research Unit Building, Main Campus, Bauchi, Nigeria',
     officeHours: 'Monday to Friday, 8:00 AM to 4:00 PM',
+    editorialContacts: [
+      { role: 'Chief Editor', name: '', phone: '' },
+      { role: 'Managing Editor', name: '', phone: '' },
+      { role: 'Secretary', name: '', phone: '' },
+    ],
   },
   branding: {
     universityLogoUrl:

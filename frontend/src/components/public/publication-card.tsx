@@ -40,13 +40,13 @@ export function PublicationCard({ publication }: PublicationCardProps) {
         </NavLink>
       </CardHeader>
       <CardContent className="space-y-5">
-        <p className="text-sm leading-7 text-muted-foreground">
+        <p className="line-clamp-4 text-sm leading-7 text-muted-foreground">
           {publication.abstract}
         </p>
         <div className="flex flex-col gap-3 sm:flex-row">
           <Button asChild variant="secondary">
             <NavLink to={`/research-repository/${publication.slug}`}>
-              View details
+              Read more
               <ArrowUpRight className="size-4" />
             </NavLink>
           </Button>

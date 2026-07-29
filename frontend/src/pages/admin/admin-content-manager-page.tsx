@@ -1264,21 +1264,24 @@ export function AdminContentManagerPage({
 
       {moduleKey === 'publications' && (
         <>
-          {draft.publications.filter((publication) => matchesSearch(publication.title, publication.authors.join(' '), publication.keywords.join(' '), publication.issueSlug)).map((publication) => <ExpandableItem key={publication.slug} description={publication.authors.join(', ')} title={publication.title}>{renderPublicationEditor(publication, draft.publications.findIndex((item) => item.slug === publication.slug))}</ExpandableItem>)}
-          <Button
-            onClick={() =>
-              updateDraft((current) => {
-                current.publications.push(
-                  createEmptyPublication(current.issues[0]?.slug ?? 'default-issue'),
-                )
-                return current
-              })
-            }
-            type="button"
-            variant="secondary"
-          >
-            Add article
-          </Button>
+          {draft.issues
+            .filter((issue) => matchesSearch(issue.title, issue.slug, String(issue.volume), String(issue.issueNumber)))
+            .map((issue) => {
+              const issueArticles = draft.publications.filter((publication) => publication.issueSlug === issue.slug)
+              return (
+                <ExpandableItem key={issue.slug} description={`${issueArticles.length} article${issueArticles.length === 1 ? '' : 's'} · Volume ${issue.volume}, Issue ${issue.issueNumber}`} title={issue.title}>
+                  <div className="space-y-3">
+                    {issueArticles.map((publication) => (
+                      <ExpandableItem key={publication.slug} description={publication.authors.join(', ')} title={publication.title}>
+                        {renderPublicationEditor(publication, draft.publications.findIndex((item) => item.slug === publication.slug))}
+                      </ExpandableItem>
+                    ))}
+                    <Button onClick={() => updateDraft((current) => { current.publications.push(createEmptyPublication(issue.slug)); return current })} type="button" variant="secondary">Add article to this issue</Button>
+                  </div>
+                </ExpandableItem>
+              )
+            })}
+          {draft.publications.filter((publication) => !draft.issues.some((issue) => issue.slug === publication.issueSlug)).map((publication) => <ExpandableItem key={publication.slug} description="Choose an issue before saving this article." title={publication.title}>{renderPublicationEditor(publication, draft.publications.findIndex((item) => item.slug === publication.slug))}</ExpandableItem>)}
         </>
       )}
 
@@ -1440,6 +1443,16 @@ export function AdminContentManagerPage({
               }
               value={draft.contact.officeHours}
             />
+            <div className="space-y-3 md:col-span-2">
+              <FieldLabel>Editorial contacts</FieldLabel>
+              {(draft.contact.editorialContacts ?? [{ role: 'Chief Editor', name: '', phone: '' }, { role: 'Managing Editor', name: '', phone: '' }, { role: 'Secretary', name: '', phone: '' }]).map((person, personIndex) => (
+                <div key={person.role} className="grid gap-3 rounded-2xl border border-border/70 p-3 md:grid-cols-3">
+                  <p className="self-center text-sm font-medium">{person.role}</p>
+                  <Input placeholder="Name" value={person.name} onChange={(event) => updateDraft((current) => { const contacts = current.contact.editorialContacts ?? [{ role: 'Chief Editor', name: '', phone: '' }, { role: 'Managing Editor', name: '', phone: '' }, { role: 'Secretary', name: '', phone: '' }]; contacts[personIndex].name = event.target.value; current.contact.editorialContacts = contacts; return current })} />
+                  <Input placeholder="Phone number" value={person.phone} onChange={(event) => updateDraft((current) => { const contacts = current.contact.editorialContacts ?? [{ role: 'Chief Editor', name: '', phone: '' }, { role: 'Managing Editor', name: '', phone: '' }, { role: 'Secretary', name: '', phone: '' }]; contacts[personIndex].phone = event.target.value; current.contact.editorialContacts = contacts; return current })} />
+                </div>
+              ))}
+            </div>
           </CardContent>
         </Card>
       )}

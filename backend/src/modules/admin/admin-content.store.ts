@@ -83,6 +83,7 @@ type ContactProfile = {
   phone: string
   address: string
   officeHours: string
+  editorialContacts: Array<{ role: string; name: string; phone: string }>
 }
 
 type BrandingContent = {
@@ -155,6 +156,11 @@ const defaultContact: ContactProfile = {
   phone: '+234 800 000 0000',
   address: 'Research Unit Building, Main Campus, Bauchi, Nigeria',
   officeHours: 'Monday to Friday, 8:00 AM to 4:00 PM',
+  editorialContacts: [
+    { role: 'Chief Editor', name: '', phone: '' },
+    { role: 'Managing Editor', name: '', phone: '' },
+    { role: 'Secretary', name: '', phone: '' },
+  ],
 }
 
 const defaultBranding: BrandingContent = {
@@ -381,7 +387,14 @@ export async function getAdminContentSnapshot(): Promise<AdminContentSnapshot> {
     events,
     gallery,
     downloads,
-    contact,
+    contact: {
+      ...defaultContact,
+      ...contact,
+      editorialContacts:
+        contact.editorialContacts?.length > 0
+          ? contact.editorialContacts
+          : defaultContact.editorialContacts,
+    },
     branding: { ...defaultBranding, ...branding },
     leadership,
     editorialBoardMembers,

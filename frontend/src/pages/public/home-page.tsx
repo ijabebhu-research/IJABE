@@ -56,6 +56,11 @@ export function HomePage() {
     <div className="space-y-14 pb-6">
       <DataStatus isFallback={siteContentState.isFallback || publicationsState.isFallback} isLoading={siteContentState.isLoading || publicationsState.isLoading} />
 
+      <section className="grid gap-6 rounded-[28px] bg-[#f2f6f2] p-6 md:grid-cols-[1.2fr_0.8fr] md:p-9">
+        <div><p className="text-sm font-semibold uppercase tracking-[0.2em] text-primary">About IJABE</p><h2 className="mt-3 font-serif text-3xl">A simple home for scholarly work.</h2><p className="mt-4 max-w-2xl leading-7 text-muted-foreground">Read research online, download publications, follow IJABE and Bingham University updates, and apply when a conference is open.</p></div>
+        <div className="grid gap-3 sm:grid-cols-3 md:grid-cols-1"><Button asChild variant="secondary"><NavLink to="/research-repository"><BookOpenText className="size-4" /> Publications</NavLink></Button><Button asChild variant="secondary"><NavLink to="/news"><Newspaper className="size-4" /> Latest news</NavLink></Button><Button asChild variant="secondary"><NavLink to="/events"><CalendarDays className="size-4" /> Conferences</NavLink></Button></div>
+      </section>
+
       <section className="space-y-5">
         <div className="max-w-3xl space-y-3">
           <Badge>International Journal of Accounting, Business Admin, &amp; Entrepreneurship</Badge>
@@ -83,11 +88,6 @@ export function HomePage() {
             </Card>
           ))}
         </div>
-      </section>
-
-      <section className="grid gap-6 rounded-[28px] bg-[#f2f6f2] p-6 md:grid-cols-[1.2fr_0.8fr] md:p-9">
-        <div><p className="text-sm font-semibold uppercase tracking-[0.2em] text-primary">About IJABE</p><h2 className="mt-3 font-serif text-3xl">A simple home for scholarly work.</h2><p className="mt-4 max-w-2xl leading-7 text-muted-foreground">Read research online, download publications, follow IJABE and Bingham University updates, and apply when a conference is open.</p></div>
-        <div className="grid gap-3 sm:grid-cols-3 md:grid-cols-1"><Button asChild variant="secondary"><NavLink to="/research-repository"><BookOpenText className="size-4" /> Publications</NavLink></Button><Button asChild variant="secondary"><NavLink to="/news"><Newspaper className="size-4" /> Latest news</NavLink></Button><Button asChild variant="secondary"><NavLink to="/events"><CalendarDays className="size-4" /> Conferences</NavLink></Button></div>
       </section>
 
       <section className="grid gap-10 lg:grid-cols-[1.2fr_0.8fr]">
