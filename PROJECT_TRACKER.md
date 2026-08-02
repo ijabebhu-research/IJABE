@@ -298,4 +298,4 @@ shared/
 
 - Corrected conference status storage so completed calls for papers remain completed after saving and continue to display publicly.
 - Simplified article detail presentation to show the abstract once, and prevented the desktop About IJABE navigation label from wrapping.
-- Updated the interface typography to a clear, modern academic pairing: Manrope for reading and interface text, with Source Serif 4 for headings.
+- Updated the interface typography to Inter, a clean, neutral research-platform style used widely across professional web applications.
