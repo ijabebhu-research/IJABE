@@ -293,7 +293,7 @@ async function getNews(): Promise<NewsItem[]> {
 
 async function getEvents(): Promise<EventItem[]> {
   const events = await prisma.event.findMany({
-    where: { status: 'PUBLISHED' },
+    where: { status: { in: ['PUBLISHED', 'COMPLETED'] } },
     orderBy: { startsAt: 'desc' },
   })
 
@@ -303,7 +303,7 @@ async function getEvents(): Promise<EventItem[]> {
     summary: event.summary ?? '',
     venue: event.venue ?? '',
     startsAt: event.startsAt?.toISOString() ?? '',
-    status: (event.status === 'PUBLISHED' ? 'Upcoming' : 'Completed') as 'Upcoming' | 'Completed',
+    status: (event.status === 'COMPLETED' ? 'Completed' : 'Upcoming') as 'Upcoming' | 'Completed',
   }))
 }
 
@@ -516,7 +516,7 @@ export async function updateAdminContentSnapshot(
         summary: item.summary,
         venue: item.venue,
         startsAt: new Date(item.startsAt),
-        status: 'PUBLISHED',
+        status: item.status === 'Completed' ? 'COMPLETED' : 'PUBLISHED',
       },
       create: {
         slug: item.slug,
@@ -524,7 +524,7 @@ export async function updateAdminContentSnapshot(
         summary: item.summary,
         venue: item.venue,
         startsAt: new Date(item.startsAt),
-        status: 'PUBLISHED',
+        status: item.status === 'Completed' ? 'COMPLETED' : 'PUBLISHED',
       },
     })
   }

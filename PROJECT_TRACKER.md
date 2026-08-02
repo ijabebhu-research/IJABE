@@ -293,3 +293,9 @@ shared/
 - Limited public article previews to four lines with a clear Read more action, and moved the About IJABE section before management profiles.
 - Added editable Chief Editor, Managing Editor, and Secretary contact details to the public contact page and administrator workspace.
 - Added crawler instructions, sitemap, and ScholarlyArticle structured data for publication pages to support search-engine discovery.
+
+## Quality Maintenance Update - August 2, 2026
+
+- Corrected conference status storage so completed calls for papers remain completed after saving and continue to display publicly.
+- Simplified article detail presentation to show the abstract once, and prevented the desktop About IJABE navigation label from wrapping.
+- Updated the interface typography to a clear, modern academic pairing: Manrope for reading and interface text, with Source Serif 4 for headings.

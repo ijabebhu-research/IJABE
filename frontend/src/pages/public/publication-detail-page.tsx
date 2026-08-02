@@ -67,7 +67,7 @@ export function PublicationDetailPage() {
       />
 
       <PageIntro
-        description={publicationState.data.abstract}
+        description="Read the article abstract, author details, and publication information below."
         eyebrow="Research Article"
         title={publicationState.data.title}
       />
